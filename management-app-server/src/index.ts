@@ -39,6 +39,7 @@ app.use((error: any, req: Request, res: Response, next: NextFunction): void => {
   });
 });
 
-app.listen(process.env.PORT, () => {
+const PORT = Number(process.env.PORT) || 8080;
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
