@@ -1,0 +1,52 @@
+@baseURL=http://localhost:8080
+
+###
+GET {{baseURL}}/error
+
+###
+GET {{baseURL}}/projects
+
+### CREATE PROJECT
+POST {{baseURL}}/projects
+Content-Type: application/json
+
+{
+  "name": "My Project",
+  "description": "This is a test project",
+  "startDate": "2025-04-05T00:00:00Z",
+  "endDate": "2025-04-10T00:00:00Z"
+}
+
+### GET TASKS
+GET {{baseURL}}/tasks/1
+###
+GET {{baseURL}}/tasks/user/1
+###
+GET {{baseURL}}/tasks/
+
+### CREATE TASKS WITH SCHEMA
+POST {{baseURL}}/tasks
+Content-Type: application/json
+
+{
+  "title": "New Task 41",
+  "description": "Set up login, registration, and password reset functionality.",
+  "status": "in_progress",
+  "priority": "high",
+  "tags": "auth,backend",
+  "startDate": "2025-04-01T09:00:00.000Z",
+  "dueDate": "2025-04-07T17:00:00.000Z",
+  "points": 5,
+  "projectId": 1,
+  "authorUserId": 2,
+  "assignedUserId": 4
+}
+
+### UPDATE STATUS TASK STATUS
+PATCH  {{baseURL}}/tasks/status
+Content-Type: application/json
+
+{
+  "taskId": 41,
+  "status": "To Do"
+}
