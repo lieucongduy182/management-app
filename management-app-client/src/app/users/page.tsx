@@ -3,7 +3,7 @@
 import Header from "@/components/Header";
 import { useGetUsersQuery } from "@/lib/state/api";
 import { useAppSelector } from "@/lib/store";
-import { dataGridClassNames, dataGridSxStyles } from "@/lib/utils";
+import { dataGridClassNames, dataGridSxStyles, getImageUrl } from "@/lib/utils";
 import {
   DataGrid,
   GridColDef,
@@ -29,7 +29,7 @@ const columns: GridColDef[] = [
           <Image
             width={100}
             height={50}
-            src={`/${params.value}`}
+            src={getImageUrl(params.value)}
             alt={params.row.username}
             className="h-full rounded-full object-cover"
           />

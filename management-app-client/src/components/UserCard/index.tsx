@@ -1,4 +1,5 @@
 import { User } from "@/lib/types";
+import { getImageUrl } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 
@@ -11,7 +12,7 @@ const UserCard = ({ user }: Props) => {
     <div className="flex items-center rounded border p-4 shadow">
       {user.profilePictureUrl && (
         <Image
-          src={`/${user.profilePictureUrl}`}
+          src={getImageUrl(user.profilePictureUrl)}
           alt="profile picture"
           width={32}
           height={32}

@@ -2,6 +2,7 @@ import { Task as TaskType } from "@/lib/types";
 import Image from "next/image";
 import { memo } from "react";
 import { format } from "date-fns";
+import { getImageUrl } from "@/lib/utils";
 
 type Props = {
   task: TaskType;
@@ -16,7 +17,7 @@ const TaskCard = ({ task }: Props) => {
           <div className="flex flex-wrap">
             {task.attachments && task.attachments.length > 0 && (
               <Image
-                src={`/${task.attachments[0].fileURL}`}
+                src={getImageUrl(task.attachments[0].fileURL)}
                 alt={task.attachments[0].fileName}
                 width={400}
                 height={200}

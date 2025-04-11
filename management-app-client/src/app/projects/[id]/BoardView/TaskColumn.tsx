@@ -4,6 +4,7 @@ import { useDrag, useDrop } from "react-dnd";
 import { EllipsisVertical, MessageSquareMore, Plus } from "lucide-react";
 import { format } from "date-fns";
 import Image from "next/image";
+import { getImageUrl } from "@/lib/utils";
 
 const Task = ({ task }: { task: TaskType }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -41,7 +42,7 @@ const Task = ({ task }: { task: TaskType }) => {
     >
       {task.attachments && task.attachments.length > 0 && (
         <Image
-          src={`/${task.attachments[0].fileURL}`}
+          src={getImageUrl(task.attachments[0].fileURL)}
           alt={task.attachments[0].fileName}
           width={400}
           height={200}
@@ -93,7 +94,7 @@ const Task = ({ task }: { task: TaskType }) => {
             {task.assignee && (
               <Image
                 key={task.assignee.id}
-                src={`/${task.assignee.profilePictureUrl}`}
+                src={getImageUrl(task.assignee.profilePictureUrl || "")}
                 alt={task.assignee.username}
                 width={30}
                 height={30}
@@ -103,7 +104,7 @@ const Task = ({ task }: { task: TaskType }) => {
             {task.author && (
               <Image
                 key={task.author.id}
-                src={`/${task.author.profilePictureUrl}`}
+                src={getImageUrl(task.author.profilePictureUrl || "")}
                 alt={task.author.username}
                 width={30}
                 height={30}

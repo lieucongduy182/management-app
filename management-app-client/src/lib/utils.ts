@@ -11,7 +11,7 @@ export const dataGridSxStyles = (isDarkMode: boolean) => {
       },
       "& .MuiDataGrid-checkboxInput": {
         color: isDarkMode ? "rgba(255, 255, 255, 0.7)" : "#0009",
-      }
+      },
     },
     "& .MuiTablePagination-root": {
       color: isDarkMode ? "#a3a3a3" : "",
@@ -24,7 +24,7 @@ export const dataGridSxStyles = (isDarkMode: boolean) => {
 
       "& .MuiDataGrid-checkboxInput": {
         color: isDarkMode ? "rgba(255, 255, 255, 0.7)" : "#0009",
-      }
+      },
     },
     "& .MuiDataGrid-row": {
       borderBottom: `1px solid ${isDarkMode ? "#2d3135" : "#e5e7eb"}`,
@@ -36,4 +36,9 @@ export const dataGridSxStyles = (isDarkMode: boolean) => {
       color: isDarkMode ? "#a3a3a3" : "",
     },
   };
+};
+
+export const getImageUrl = (url: string) => {
+  if (!url) return "";
+  return process.env.NEXT_PUBLIC_S3_URL ? `${process.env.NEXT_PUBLIC_S3_URL}/${url}` : `/${url}`;
 };
