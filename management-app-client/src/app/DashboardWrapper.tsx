@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { useAppSelector } from "@/lib/store";
 import StoreProvider from "./StoreProvider";
+import AuthProvider from "./AuthProvider";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const isSideBarCollapsed = useAppSelector(
@@ -25,7 +26,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Side bar */}
       <Sidebar />
       <main
-        className={`dark:bg-dark-bg flex w-full flex-col bg-gray-50 ${isSideBarCollapsed ? "" : "md:pl-64"}`}
+        className={`flex w-full flex-col bg-gray-50 dark:bg-dark-bg ${isSideBarCollapsed ? "" : "md:pl-64"}`}
       >
         {/* Navbar */}
         <Navbar />
@@ -38,7 +39,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <StoreProvider>
-      <DashboardLayout>{children}</DashboardLayout>
+      <AuthProvider>
+        <DashboardLayout>{children}</DashboardLayout>
+      </AuthProvider>
     </StoreProvider>
   );
 };
