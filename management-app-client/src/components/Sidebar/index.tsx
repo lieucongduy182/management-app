@@ -22,8 +22,9 @@ import {
 import Image from "next/image";
 import React, { useState } from "react";
 import SidebarLink from "./SidebarLink";
-import { useGetProjectsQuery } from "@/lib/state/api";
+import { useGetAuthUserQuery, useGetProjectsQuery } from "@/lib/state/api";
 import { getImageUrl } from "@/lib/utils";
+import { signOut } from "aws-amplify/auth";
 
 const Sidebar = () => {
   const [showProjects, setShowProjects] = useState(true);
@@ -36,6 +37,21 @@ const Sidebar = () => {
 
   const { data } = useGetProjectsQuery();
   const projects = data?.data || [];
+
+  const { data: currentUser } = useGetAuthUserQuery({});
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
+  if (!currentUser) {
+    return null;
+  }
+  const currentUserDetail = currentUser?.userDetail;
 
   const sideBarClassnames = `fixed z-40 flex h-[100%] flex-col overflow-y-auto bg-white shadow-xl transition-all duration-300 dark:bg-black ${isSidebarCollapsed ? "w-0" : "w-64"}`;
 
@@ -147,7 +163,32 @@ const Sidebar = () => {
           </nav>
         </>
       )}
-      {/* PRIORITY LIST */}
+      <div className="md:hidden z-10 mt-32 flex w-full flex-col items-center gap-4 bg-white px-8 py-4 dark:bg-black">
+        <div className="md:hidden items-center justify-between flex">
+          <div className="align-center flex h-9 w-9 justify-center">
+            {!!currentUserDetail?.profilePictureUrl ? (
+              <Image
+                src={getImageUrl(currentUserDetail?.profilePictureUrl)}
+                alt={currentUserDetail?.username || "User Profile Picture"}
+                width={100}
+                height={50}
+                className="h-full rounded-full object-cover"
+              />
+            ) : (
+              <User className="h-6 w-6 cursor-pointer self-center rounded-full dark:text-white" />
+            )}
+          </div>
+          <span className="mx-3 text-gray-800 dark:text-white">
+            {currentUserDetail?.username}
+          </span>
+          <button
+            className="self-start rounded bg-blue-400 px-2 py-2 text-xs font-bold text-white hover:bg-blue-500 md:block"
+            onClick={handleSignOut}
+          >
+            Sign out
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

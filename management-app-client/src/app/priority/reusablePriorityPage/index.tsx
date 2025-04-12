@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import NewTaskModal from "@/components/NewTaskModal";
 import TaskCard from "@/components/TaskCard";
 import useModal from "@/hooks/useModal";
-import { useGetTasksByUserIdQuery } from "@/lib/state/api";
+import { useGetAuthUserQuery, useGetTasksByUserIdQuery } from "@/lib/state/api";
 import { useAppSelector } from "@/lib/store";
 import { Task, TaskPriority } from "@/lib/types";
 import { dataGridClassNames, dataGridSxStyles } from "@/lib/utils";
@@ -19,7 +19,8 @@ type Props = {
 const ReusablePriority = ({ priority }: Props) => {
   const [view, setView] = useState("list");
   const { isOpen, openModal, closeModal } = useModal();
-  const userId = 1;
+  const { data: currentUser } = useGetAuthUserQuery({});
+  const userId = currentUser?.userDetail?.id ?? null;
   const { data, isLoading, isError } = useGetTasksByUserIdQuery(
     {
       userId,

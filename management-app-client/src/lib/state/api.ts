@@ -7,9 +7,22 @@ import {
   Team,
   User,
 } from "@/lib/types";
+import { fetchAuthSession, getCurrentUser } from "aws-amplify/auth";
 
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+    prepareHeaders: async (headers) => {
+      const session = await fetchAuthSession();
+      const { accessToken } = session.tokens ?? {};
+
+      if (accessToken) {
+        headers.set("Authorization", `Bearer ${accessToken}`);
+      }
+
+      return headers;
+    },
+  }),
   reducerPath: "api",
   tagTypes: ["Projects", "Tasks", "Users", "Teams"],
   endpoints: (builder) => ({
@@ -32,7 +45,10 @@ export const api = createApi({
           ? result.data.map(({ id }) => ({ type: "Tasks" as const, id }))
           : [{ type: "Tasks" as const }],
     }),
-    getTasksByUserId: builder.query<ApiResponse<Task[]>, { userId: number }>({
+    getTasksByUserId: builder.query<
+      ApiResponse<Task[]>,
+      { userId: number | null }
+    >({
       query: ({ userId }) => `tasks/user/${userId}`,
       providesTags: (result) =>
         result
@@ -71,6 +87,30 @@ export const api = createApi({
       query: () => "teams",
       providesTags: ["Teams"],
     }),
+    getAuthUser: builder.query({
+      queryFn: async (_, _queryApi, _extraOptions, fetchWithBQ) => {
+        try {
+          const user = await getCurrentUser();
+          const session = await fetchAuthSession();
+          if (!session) {
+            return { error: { status: 401, data: "No session found" } };
+          }
+          const { userSub } = session;
+          const userDetailResponse = await fetchWithBQ(`users/${userSub}`);
+          if (userDetailResponse.error) {
+            return { error: userDetailResponse.error };
+          }
+          const userDetail = (userDetailResponse?.data as ApiResponse<User>)
+            .data;
+
+          return { data: { user, userSub, userDetail } };
+        } catch (error: any) {
+          return {
+            error: { status: 500, data: error.message || "Unknown error" },
+          };
+        }
+      },
+    }),
   }),
 });
 
@@ -84,4 +124,5 @@ export const {
   useGetUsersQuery,
   useGetTeamsQuery,
   useGetTasksByUserIdQuery,
+  useGetAuthUserQuery,
 } = api;
