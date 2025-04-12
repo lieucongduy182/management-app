@@ -10,6 +10,15 @@ class UserController {
       data: users,
     }).send(res);
   }
+
+  static async getUser(req: Request, res: Response) {
+    const { cognitoId } = req.params;
+    const user = await userService.getUser({ cognitoId });
+    return new SuccessResponse({
+      message: 'Get User Detail successfully',
+      data: user,
+    }).send(res);
+  }
 }
 
 export default UserController;

@@ -5,5 +5,6 @@ import { asyncHandler } from '../../helpers/asyncHandler';
 const router = Router();
 
 router.get('/', asyncHandler(userController.getUsers));
+router.get('/:cognitoId', asyncHandler(userController.getUser));
 
 export default router;
