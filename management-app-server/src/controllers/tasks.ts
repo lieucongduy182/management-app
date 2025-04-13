@@ -4,7 +4,6 @@ import taskService from '../services/tasks';
 
 class TaskController {
   static async getTask(req: Request, res: Response) {
-    console.log('🚀 [Debug] ~ tasks.ts:10 ~ TaskController ~ getTask ~ req.params:', req.params)
     const tasks = await taskService.getTasks({
       projectId: +req.params.projectId,
     });

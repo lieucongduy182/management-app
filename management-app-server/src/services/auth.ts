@@ -14,7 +14,7 @@ class AuthService {
       const {
         username,
         cognitoId,
-        profilePictureUrl = 'i10.jpg',
+        profilePictureUrl = 'p13.jpeg',
         teamId = 1,
       } = body;
       const newUsers = await db.user.create({
